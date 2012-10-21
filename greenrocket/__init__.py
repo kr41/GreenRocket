@@ -2,27 +2,27 @@
 Green Rocket is a simple implementation of Observer (or Publish/Subscribe)
 design pattern using Signals.
 
-Create specific signal from base class:
+Create specific signal from base class::
 
     >>> from greenrocket import Signal
     >>> class MySignal(Signal):
     ...     pass
     ...
 
-Subscribe handler:
+Subscribe handler::
 
     >>> @MySignal.subscribe
     ... def handler(signal):
     ...     print('handler: ' + repr(signal))
     ...
 
-Fire signal:
+Fire signal::
 
     >>> MySignal().fire()
     handler: MySignal()
 
 Note, that signal propagates over inheritance, i.e. all subscribes of base
-signal will be called when child signal fired:
+signal will be called when child signal fired::
 
     >>> @Signal.subscribe
     ... def base_hadler(signal):
@@ -32,13 +32,13 @@ signal will be called when child signal fired:
     handler: MySignal()
     base_handler: MySignal()
 
-Unsubscribe handler:
+Unsubscribe handler::
 
     >>> MySignal.unsubscribe(handler)
     >>> MySignal().fire()
     base_handler: MySignal()
 
-Any keyword argument passed to signal constructor becomes its attribute:
+Any keyword argument passed to signal constructor becomes its attribute::
 
     >>> s = Signal(a=1, b=2)
     >>> s.a
