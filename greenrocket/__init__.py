@@ -56,8 +56,6 @@ __version__ = '0.1'
 __author__ = 'Dmitry Vakhrushev <self@kr41.net>'
 __license__ = 'BSD'
 
-logger = getLogger(__name__)
-
 
 class SignalMeta(type):
     """ Signal Meta Class """
@@ -74,19 +72,19 @@ BaseSignal = SignalMeta('BaseSignal', (object,), {})
 class Signal(BaseSignal):
     """ Base Signal Class """
 
-    __metaclass__ = SignalMeta
+    logger = getLogger(__name__)
 
     @classmethod
     def subscribe(cls, handler):
         """ Subscribe handler to signal.  May be used as decorator """
-        logger.debug('Subscribe %r on %r', handler, cls)
+        cls.logger.debug('Subscribe %r on %r', handler, cls)
         cls.__handlers__.add(handler)
         return handler
 
     @classmethod
     def unsubscribe(cls, handler):
         """ Unsubscribe handler from signal """
-        logger.debug('Unsubscribe %r from %r', handler, cls)
+        cls.logger.debug('Unsubscribe %r from %r', handler, cls)
         cls.__handlers__.discard(handler)
 
     def __init__(self, **kw):
@@ -101,14 +99,14 @@ class Signal(BaseSignal):
 
     def fire(self):
         """ Fire signal """
-        logger.debug('Fired %r', self)
+        self.logger.debug('Fired %r', self)
         for cls in self.__class__.__mro__:
             if hasattr(cls, '__handlers__'):
-                logger.debug('Propagate on %r', cls)
+                self.logger.debug('Propagate on %r', cls)
                 for handler in cls.__handlers__:
                     try:
-                        logger.debug('Call %r', handler)
+                        self.logger.debug('Call %r', handler)
                         handler(self)
                     except:
-                        logger.error('Failed on processing %r by %r',
-                                      self, handler, exc_info=True)
+                        self.logger.error('Failed on processing %r by %r',
+                                          self, handler, exc_info=True)
