@@ -52,7 +52,7 @@ from logging import getLogger
 
 
 __all__ = ['Signal']
-__version__ = '0.1'
+__version__ = '0.11'
 __author__ = 'Dmitry Vakhrushev <self@kr41.net>'
 __license__ = 'BSD'
 
