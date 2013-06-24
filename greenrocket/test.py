@@ -1,3 +1,5 @@
+import gc
+
 from nose import tools
 
 from greenrocket import Signal
@@ -65,3 +67,18 @@ def propagation_test():
     MySignal().fire()
     tools.eq_(log, ["processed by my_handler: MySignal()",
                     "processed by handler: MySignal()"])
+
+
+def weakref_handler_test():
+    log = []
+
+    def subscribe():
+        @Signal.subscribe
+        def handler(signal):
+            log.append('processed: ' + repr(signal))
+        Signal().fire()
+
+    subscribe()
+    gc.collect()            # PyPy fails the test without explicit call
+    Signal().fire()
+    tools.eq_(log, ["processed: Signal()"])

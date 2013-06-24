@@ -49,10 +49,16 @@ Any keyword argument passed to signal constructor becomes its attribute::
 """
 
 from logging import getLogger
+try:
+    from weakref import WeakSet
+except ImportError:
+    # Python 2.6
+    # TODO: Add to dependecies into setup.py
+    from weakrefset import WeakSet
 
 
 __all__ = ['Signal']
-__version__ = '0.11'
+__version__ = '0.2'
 __author__ = 'Dmitry Vakhrushev <self@kr41.net>'
 __license__ = 'BSD'
 
@@ -60,9 +66,8 @@ __license__ = 'BSD'
 class SignalMeta(type):
     """ Signal Meta Class """
 
-    def __new__(meta, class_name, bases, attrs):
-        attrs['__handlers__'] = set()
-        return super(SignalMeta, meta).__new__(meta, class_name, bases, attrs)
+    def __init__(cls, class_name, bases, attrs):
+        cls.__handlers__ = WeakSet()
 
 
 # For compatibility between Python 2.x and Python 3.x
