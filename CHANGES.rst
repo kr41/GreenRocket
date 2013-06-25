@@ -1,8 +1,8 @@
 CHANGES
 =======
 
-0.2
----
+0.20
+----
 
 *   Changed handler subscription mechanism from subscription by reference to
     subscription by weak reference

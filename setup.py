@@ -6,7 +6,7 @@ import os
 import sys
 from setuptools import setup
 
-version = '0.2'
+version = '0.20'
 here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.rst')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.rst')).read()

@@ -83,7 +83,7 @@ except ImportError:
 
 
 __all__ = ['Signal']
-__version__ = '0.2'
+__version__ = '0.20'
 __author__ = 'Dmitry Vakhrushev <self@kr41.net>'
 __license__ = 'BSD'
 
