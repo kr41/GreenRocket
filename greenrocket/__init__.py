@@ -79,7 +79,6 @@ try:
     from weakref import WeakSet
 except ImportError:
     # Python 2.6
-    # TODO: Add to dependecies into setup.py
     from weakrefset import WeakSet
 
 
