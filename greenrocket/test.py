@@ -79,6 +79,6 @@ def weakref_handler_test():
         Signal().fire()
 
     subscribe()
-    gc.collect()            # PyPy fails the test without explicit call
+    gc.collect()            # PyPy fails the test without this explicit call
     Signal().fire()
     tools.eq_(log, ["processed: Signal()"])

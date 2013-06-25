@@ -1,8 +1,8 @@
 """
-Green Rocket is a simple implementation of Observer (or Publish/Subscribe)
-design pattern using Signals.
+Green Rocket is a simple and compact implementation of Observer
+(or Publish/Subscribe) design pattern via signals.
 
-Create specific signal from base class::
+Create specific signal using base one::
 
     >>> from greenrocket import Signal
     >>> class MySignal(Signal):
@@ -21,8 +21,8 @@ Fire signal::
     >>> MySignal().fire()
     handler: MySignal()
 
-Note, that signal propagates over inheritance, i.e. all subscribes of base
-signal will be called when child signal fired::
+Note, that signal propagates over inheritance, i.e. all subscribers of base
+signal will be called when child one is fired::
 
     >>> @Signal.subscribe
     ... def base_hadler(signal):
@@ -38,13 +38,39 @@ Unsubscribe handler::
     >>> MySignal().fire()
     base_handler: MySignal()
 
-Any keyword argument passed to signal constructor becomes its attribute::
+The handler is subscribed using weak reference.  So if you create and subscribe
+a handler in local scope (for example inside a generator), it will unsubscribed
+automatically.
 
-    >>> s = Signal(a=1, b=2)
+    >>> def gen():
+    ...     @MySignal.subscribe
+    ...     def local_handler(signal):
+    ...         print('local_handler: ' + repr(signal))
+    ...     yield 1
+    ...
+    >>> for value in gen():
+    ...     MySignal(value=value).fire()
+    ...
+    local_handler: MySignal(value=1)
+    base_handler: MySignal(value=1)
+    >>> import gc                    # PyPy fails the following test without
+    >>> gc.collect()                 # an explicit call of garbage collector.
+    0
+    >>> MySignal(value=2).fire()
+    base_handler: MySignal(value=2)
+
+As you can see above, signal constructor accepts keyword arguments.  These
+arguments are available as signal attributes::
+
+    >>> s = MySignal(a=1, b=2)
     >>> s.a
     1
     >>> s.b
     2
+
+Signal suppresses any exception which is raised on handler call.  It uses
+logger named ``greenrocket`` from standard ``logging`` module to log errors and
+debug information.
 
 """
 
