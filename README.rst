@@ -44,6 +44,8 @@ The handler is subscribed using weak reference.  So if you create and subscribe
 a handler in local scope (for example inside a generator), it will unsubscribed
 automatically.
 
+::
+
     >>> def gen():
     ...     @MySignal.subscribe
     ...     def local_handler(signal):
