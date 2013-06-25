@@ -37,7 +37,7 @@ setup(
     url='https://bitbucket.org/kr41/greenrocket',
     download_url='https://bitbucket.org/kr41/greenrocket/downloads',
     license='BSD',
-    packages=['greenrocket'],
+    py_modules=['greenrocket'],
     install_requires=requires,
     zip_safe=True,
 )
