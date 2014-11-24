@@ -1,6 +1,12 @@
 CHANGES
 =======
 
+0.21
+----
+
+*   Removed distribute dependency
+*   Improved tests
+
 0.20
 ----
 

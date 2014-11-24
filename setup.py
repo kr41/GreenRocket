@@ -2,10 +2,12 @@ import os
 import sys
 from setuptools import setup
 
-version = '0.20'
+version = '0.21'
 here = os.path.abspath(os.path.dirname(__file__))
-README = open(os.path.join(here, 'README.rst')).read()
-CHANGES = open(os.path.join(here, 'CHANGES.rst')).read()
+with open(os.path.join(here, 'README.rst')) as f:
+    README = f.read()
+with open(os.path.join(here, 'CHANGES.rst')) as f:
+    CHANGES = f.read()
 
 requires = []
 if sys.version_info[0] == 2 and sys.version_info[1] == 6:
@@ -29,6 +31,7 @@ setup(
         'Programming Language :: Python :: Implementation :: CPython',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Intended Audience :: Developers',
+        'Operating System :: OS Independent',
     ],
     keywords='signal observer publisher subscriber',
     author='Dmitry Vakhrushev',
