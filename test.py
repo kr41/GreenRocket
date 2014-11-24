@@ -67,6 +67,7 @@ def propagation_test():
     MySignal().fire()
     tools.eq_(log, ["processed by my_handler: MySignal()",
                     "processed by handler: MySignal()"])
+    Signal.unsubscribe(handler)
 
 
 def weakref_handler_test():

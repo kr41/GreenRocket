@@ -58,8 +58,7 @@ automatically.
     local_handler: MySignal(value=1)
     base_handler: MySignal(value=1)
     >>> import gc                    # PyPy fails the following test without
-    >>> gc.collect()                 # an explicit call of garbage collector.
-    0
+    >>> _ = gc.collect()             # an explicit call of garbage collector.
     >>> MySignal(value=2).fire()
     base_handler: MySignal(value=2)
 
