@@ -1,1 +1,1 @@
-include *.txt *.cfg
+include *.rst *.txt *.cfg
