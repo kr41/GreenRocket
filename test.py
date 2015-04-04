@@ -2,7 +2,7 @@ import gc
 
 from nose import tools
 
-from greenrocket import Signal
+from greenrocket import Signal, Watchman
 
 
 def signal_test():
@@ -83,3 +83,45 @@ def weakref_handler_test():
     gc.collect()            # PyPy fails the test without this explicit call
     Signal().fire()
     tools.eq_(log, ["processed: Signal()"])
+
+
+def watchman_test():
+    watchman = Watchman(Signal)
+    tools.eq_(len(watchman.log), 0)
+
+    Signal(x=1, y=2).fire()
+    tools.eq_(len(watchman.log), 1)
+    tools.eq_(watchman.log[0].x, 1)
+    tools.eq_(watchman.log[0].y, 2)
+    watchman.assert_fired_with(x=1, y=2)
+
+    Signal(z=3).fire()
+    tools.eq_(len(watchman.log), 2)
+    tools.eq_(watchman.log[1].z, 3)
+    watchman.assert_fired_with(z=3)
+
+    watchman.assert_fired_with(-2, x=1, y=2)
+
+    assert_error_raised = True
+    try:
+        watchman.assert_fired_with(-3)
+        assert_error_raised = False
+    except AssertionError as e:
+        tools.eq_(e.args[0], 'There is no Signal in the log at index -3')
+    tools.ok_(assert_error_raised)
+
+    assert_error_raised = True
+    try:
+        watchman.assert_fired_with(x=1)
+        assert_error_raised = False
+    except AssertionError as e:
+        tools.eq_(e.args[0], 'Signal has no attribute x')
+    tools.ok_(assert_error_raised)
+
+    assert_error_raised = True
+    try:
+        watchman.assert_fired_with(z=4)
+        assert_error_raised = False
+    except AssertionError as e:
+        tools.eq_(e.args[0], 'Failed assertion on Signal.z: 3 != 4')
+    tools.ok_(assert_error_raised)

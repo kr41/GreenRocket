@@ -1,5 +1,11 @@
+
 CHANGES
 =======
+
+0.22
+----
+
+*   Added `Watchman` class as a testing helper
 
 0.21
 ----
