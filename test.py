@@ -1,5 +1,10 @@
 import gc
 
+try:
+    import asyncio
+except ImportError:
+    asyncio = None
+
 from nose import tools
 
 from greenrocket import Signal, Watchman
@@ -125,3 +130,28 @@ def watchman_test():
     except AssertionError as e:
         tools.eq_(e.args[0], 'Failed assertion on Signal.z: 3 != 4')
     tools.ok_(assert_error_raised)
+
+
+if asyncio is not None:
+    def afire_test():
+
+        log = []
+
+        @Signal.subscribe
+        @asyncio.coroutine
+        def handler(signal):
+            log.append('processed by handler: ' + repr(signal))
+
+        @Signal.subscribe
+        @asyncio.coroutine
+        def error_handler(signal):
+            log.append('processed by error_handler: ' + repr(signal))
+            raise Exception('Test')
+
+        signal = Signal()
+        loop = asyncio.new_event_loop()
+        loop.run_until_complete(signal.afire())
+
+        log.sort()
+        tools.eq_(log, ['processed by error_handler: Signal()',
+                        'processed by handler: Signal()'])

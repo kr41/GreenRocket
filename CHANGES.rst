@@ -2,6 +2,13 @@
 CHANGES
 =======
 
+0.30
+----
+
+*   Added ``Signal.afire()`` method that returns awaitable to support
+    coroutine-based signal handlers
+*   Dropped Python 2.6 and 3.2 support
+
 0.22
 ----
 

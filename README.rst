@@ -30,6 +30,11 @@ Fire signal:
     >>> MySignal().fire()
     handler: MySignal()
 
+If you are using ``asyncio``, you can also use coroutines as handlers
+and fire signal asynchronously using ``await Signal.afire()`` or
+``yield from Signal().afire()``.  Method ``afire()`` works well with
+synchronous handlers too.
+
 Note, that signal propagates over inheritance, i.e. all subscribers of base
 signal will be called when child one is fired:
 

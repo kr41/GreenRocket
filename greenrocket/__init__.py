@@ -27,6 +27,11 @@ Fire signal:
     >>> MySignal().fire()
     handler: MySignal()
 
+If you are using ``asyncio``, you can also use coroutines as handlers
+and fire signal asynchronously using ``await Signal.afire()`` or
+``yield from Signal().afire()``.  Method ``afire()`` works well with
+synchronous handlers too.
+
 Note, that signal propagates over inheritance, i.e. all subscribers of base
 signal will be called when child one is fired:
 
@@ -142,15 +147,16 @@ But you can specify which one to test:
 """
 
 from logging import getLogger
+from weakref import WeakSet
+
 try:
-    from weakref import WeakSet
-except ImportError:                         # pragma: nocover
-    # Python 2.6
-    from weakrefset import WeakSet          # pragma: nocover
+    from . import aio
+except (ImportError, SyntaxError):  # pragma: no cover
+    aio = None
 
 
 __all__ = ['Signal', 'Watchman']
-__version__ = '0.22'
+__version__ = '0.30'
 __author__ = 'Dmitry Vakhrushev <self@kr41.net>'
 __license__ = 'BSD'
 
@@ -207,6 +213,9 @@ class Signal(BaseSignal):
                     except:
                         self.logger.error('Failed on processing %r by %r',
                                           self, handler, exc_info=True)
+
+    if aio:  # pragma: no cover
+        afire = aio.afire
 
 
 class Watchman(object):
